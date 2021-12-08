@@ -1,0 +1,71 @@
+
+/*====================================== BEHAVIOUR ======================================*/
+
+void RETREAT_AVOID() {
+  counter_gait = 3;
+  while(counter_gait <= counter_gait_max) {
+    RETREAT();
+  }
+}
+
+void ROTATE_LEFT_AVOID() {
+  counter_gait = 0;
+  rotate_random = 4;
+  while(counter_gait <= counter_gait_max) {
+    ROTATE_LEFT();
+  }
+}
+
+void ROTATE_RIGHT_AVOID() {
+  counter_gait = 0;
+  rotate_random = 2;
+  while(counter_gait <= counter_gait_max) {
+    ROTATE_RIGHT();
+  }
+}
+
+void ROTATE_RANDOM_AVOID() {
+  rotate_random = ROTATE_RANDOM();
+  while(rotate_random == 0) {
+    ROTATE_LEFT_AVOID();
+  }
+  while(rotate_random == 1) {
+    ROTATE_RIGHT_AVOID();
+  }
+}
+
+void SIDE_AVOID() {
+  if(distance[LEFT] <= distTurn && distance[RIGHT] > distTurn) {
+    LIGHT_left = 0;
+    LIGHT_right = 0;
+    
+    SONAR_left = 0;
+    SONAR_right = -(map(distance[LEFT], 0, distTurn, ANGLE_turnMAX, 0));
+  }
+  else if(distance[RIGHT] <= distTurn && distance[LEFT] > distTurn) {
+    LIGHT_left = 0;
+    LIGHT_right = 0;
+    
+    SONAR_right = 0;
+    SONAR_left = map(distance[RIGHT], 0, distTurn, ANGLE_turnMAX, 0);
+  }
+  else if(distance[LEFT] <= distTurn && distance[RIGHT] <= distTurn) {
+    LIGHT_left = 0;
+    LIGHT_right = 0;
+    
+    if(distance[LEFT] < distance[RIGHT]) {
+      SONAR_left = 0;
+      SONAR_right = -(map(distance[LEFT], 0, distTurn, ANGLE_turnNARROW, 0));
+    }
+    else if(distance[RIGHT] < distance[LEFT]) {
+      SONAR_right = 0;
+      SONAR_left = map(distance[RIGHT], 0, distTurn, ANGLE_turnNARROW, 0);
+    }
+  }
+  else {
+    SONAR_right = 0;
+    SONAR_left = 0;
+  }
+}
+
+/*end*/
